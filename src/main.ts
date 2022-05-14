@@ -1,4 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+// main.ts
+import { createApp } from "vue";
+import Idux from "./idux";
 
-createApp(App).mount('#app')
+import App from "./App.vue";
+
+createApp(App).use(Idux).mount("#app");
