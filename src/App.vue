@@ -65,6 +65,7 @@ const handleAdd = () => {
     content: inputContent.value,
     isDone: false,
   });
+  inputContent.value = "";
 };
 /**
  * 输入框回车提交结果
