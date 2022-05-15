@@ -9,7 +9,7 @@
         <IxButton
           @click="handleDone(record.key)"
           shape="circle"
-          :mode="record.status === Status.isDone ? 'primary' : 'default'"
+          :mode="record.isDone ? 'primary' : 'default'"
           icon="success"
         />
       </template>
@@ -35,16 +35,13 @@
 
 <script setup lang="ts">
 import { TableColumn } from "@idux/components";
+import { tr } from "date-fns/locale";
 import { ref } from "vue";
 
-enum Status {
-  isDone,
-  inProgress,
-}
 interface Data {
   key?: number;
   content: string;
-  status: Status;
+  isDone: boolean;
 }
 let tableIndex: number = 0;
 
@@ -53,7 +50,7 @@ const data = ref<Data[]>([
   {
     key: tableIndex,
     content: "我是测试TODO数据",
-    status: Status.inProgress,
+    isDone: false,
   },
 ]);
 const shouldShow = ref(-1);
@@ -66,7 +63,7 @@ const handleAdd = () => {
   data.value.push({
     key: ++tableIndex,
     content: inputContent.value,
-    status: Status.inProgress,
+    isDone: false,
   });
 };
 /**
@@ -85,7 +82,7 @@ const hoverIndex = (index: number) => (shouldShow.value = index);
 const handleDone = (key: number) => {
   data.value = data.value.map((v) => {
     if (v.key === key) {
-      v.status = Status.isDone;
+      v.isDone = true;
     }
     return v;
   });
