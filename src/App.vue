@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import { TableColumn } from "@idux/components";
-import { tr } from "date-fns/locale";
 import { ref } from "vue";
 
 interface Data {
@@ -82,7 +81,7 @@ const hoverIndex = (index: number) => (shouldShow.value = index);
 const handleDone = (key: number) => {
   data.value = data.value.map((v) => {
     if (v.key === key) {
-      v.isDone = true;
+      v.isDone = !v.isDone;
     }
     return v;
   });
