@@ -1,5 +1,6 @@
 <template>
   <IxSpace vertical>
+    <IxHeader showBar size="xl"> TODO LIST </IxHeader>
     <IxSpace size="sm">
       <IxInput v-model:value="inputContent" @keydown="onEnter" />
       <IxButton icon="plus-circle" @click="handleAdd">Add</IxButton>
