@@ -1,13 +1,96 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <IxSpace vertical>
+    <IxSpace size="sm">
+      <IxInput v-model:value="inputContent" @keydown="onEnter" />
+      <IxButton icon="plus-circle" @click="handleAdd">Add</IxButton>
+    </IxSpace>
+    <IxTable :columns="columns" :dataSource="data" headless>
+      <template #progress="{ record }">
+        <IxButton
+          @click="handleDone(record.key)"
+          shape="circle"
+          icon="success"
+        />
+      </template>
+      <template #action="{ record }">
+        <IxButton
+          mode="dashed"
+          @click="handleDel(record.key)"
+          danger
+          icon="close"
+          shape="circle"
+        />
+      </template>
+    </IxTable>
+  </IxSpace>
 </template>
+
+<script setup lang="ts">
+import { TableColumn } from "@idux/components";
+import { ref } from "vue";
+
+enum Status {
+  isDone,
+  inProgress,
+}
+interface Data {
+  key?: number;
+  content: string;
+  status: Status;
+}
+let tableIndex: number = 0;
+
+// 表格数据源
+const data = ref<Data[]>([
+  {
+    key: tableIndex,
+    content: "我是测试TODO数据",
+    status: Status.inProgress,
+  },
+]);
+// 输入内容
+const inputContent = ref("");
+/**
+ * Add
+ */
+const handleAdd = () => {
+  console.log("添加成功");
+  data.value.push({
+    key: ++tableIndex,
+    content: inputContent.value,
+    status: Status.inProgress,
+  });
+};
+/**
+ * 输入框回车提交结果
+ * @param evt
+ */
+const onEnter = (evt: KeyboardEvent) => (evt.keyCode === 13 ? handleAdd() : "");
+
+/**
+ * TODO的事件处理
+ */
+const handleDone = (key: any) => {
+  console.log("done", key);
+};
+const handleDel = (key: any) => {
+  console.log("del", key);
+};
+
+const columns: TableColumn<Data>[] = [
+  {
+    dataKey: "key",
+    customCell: "progress",
+  },
+  {
+    dataKey: "content",
+  },
+  {
+    dataKey: "key",
+    customCell: "action",
+  },
+];
+</script>
 
 <style>
 #app {
