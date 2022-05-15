@@ -9,6 +9,7 @@
         <IxButton
           @click="handleDone(record.key)"
           shape="circle"
+          :mode="record.status === Status.isDone ? 'primary' : 'default'"
           icon="success"
         />
       </template>
@@ -62,7 +63,6 @@ const inputContent = ref("");
  * Add
  */
 const handleAdd = () => {
-  console.log("添加成功");
   data.value.push({
     key: ++tableIndex,
     content: inputContent.value,
@@ -77,20 +77,29 @@ const onEnter = (evt: KeyboardEvent) => (evt.keyCode === 13 ? handleAdd() : "");
 /**
  * 删除按钮的显隐
  */
-const hoverIndex = (index: number) => {
-  shouldShow.value = index;
-};
+const hoverIndex = (index: number) => (shouldShow.value = index);
 
 /**
- * TODO的事件处理
+ * Todo完成任务处理
  */
-const handleDone = (key: any) => {
-  console.log("done", key);
+const handleDone = (key: number) => {
+  data.value = data.value.map((v) => {
+    if (v.key === key) {
+      v.status = Status.isDone;
+    }
+    return v;
+  });
 };
-const handleDel = (key: any) => {
-  console.log("del", key);
+/**
+ * Todo任务删除处理
+ * @param key 任务Key
+ */
+const handleDel = (key: number) => {
+  data.value = data.value.filter((_v) => _v.key !== key);
 };
-
+/**
+ * 表格数据列定义
+ */
 const columns: TableColumn<Data>[] = [
   {
     dataKey: "key",
@@ -98,6 +107,7 @@ const columns: TableColumn<Data>[] = [
   },
   {
     dataKey: "content",
+    customCell: "",
   },
   {
     dataKey: "key",
