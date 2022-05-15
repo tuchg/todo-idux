@@ -13,13 +13,20 @@
         />
       </template>
       <template #action="{ record }">
-        <IxButton
-          mode="dashed"
-          @click="handleDel(record.key)"
-          danger
-          icon="close"
-          shape="circle"
-        />
+        <div
+          class="block"
+          @mouseover="hoverIndex(record.key)"
+          @mouseout="shouldShow = -1"
+        >
+          <IxButton
+            v-show="shouldShow === record.key"
+            mode="dashed"
+            @click="handleDel(record.key)"
+            danger
+            icon="close"
+            shape="circle"
+          />
+        </div>
       </template>
     </IxTable>
   </IxSpace>
@@ -48,6 +55,7 @@ const data = ref<Data[]>([
     status: Status.inProgress,
   },
 ]);
+const shouldShow = ref(-1);
 // 输入内容
 const inputContent = ref("");
 /**
@@ -66,6 +74,12 @@ const handleAdd = () => {
  * @param evt
  */
 const onEnter = (evt: KeyboardEvent) => (evt.keyCode === 13 ? handleAdd() : "");
+/**
+ * 删除按钮的显隐
+ */
+const hoverIndex = (index: number) => {
+  shouldShow.value = index;
+};
 
 /**
  * TODO的事件处理
@@ -100,5 +114,9 @@ const columns: TableColumn<Data>[] = [
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.block {
+  width: 30px;
+  height: 30px;
 }
 </style>
